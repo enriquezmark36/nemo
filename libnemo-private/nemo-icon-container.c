@@ -1256,7 +1256,8 @@ lay_down_one_line (NemoIconContainer *container,
 		   double y,
 		   double max_height,
 		   GArray *positions,
-		   gboolean whole_text)
+		   gboolean whole_text,
+		   gint width_delta)
 {
 	GList *p;
 	NemoIcon *icon;
@@ -1267,8 +1268,14 @@ lay_down_one_line (NemoIconContainer *container,
 
 	is_rtl = nemo_icon_container_is_layout_rtl (container);
 
-	/* Lay out the icons along the baseline. */
-	x = ICON_PAD_LEFT;
+	if (container->details->label_position == NEMO_ICON_LABEL_POSITION_UNDER &&
+	    width_delta > 0 ) {
+		/* Center the icon when its space is bigger than the window */
+		x -= width_delta / 2 ;
+	} else {
+		/* Lay out the icons along the baseline. */
+		x = ICON_PAD_LEFT;
+        }
 	i = 0;
 	for (p = line_start; p != line_end; p = p->next) {
 		icon = p->data;
@@ -1351,6 +1358,9 @@ lay_down_icons_horizontal (NemoIconContainer *container,
 	double max_text_width, max_icon_width;
 	int icon_width;
 	int i;
+	int no_icons;
+	int no_elems;
+        
 	GtkAllocation allocation;
 
 	g_assert (NEMO_IS_ICON_CONTAINER (container));
@@ -1405,9 +1415,15 @@ lay_down_icons_horizontal (NemoIconContainer *container,
 	line_start = icons;
 	y = start_y + CONTAINER_PAD_TOP;
 	i = 0;
-	
+	no_icons = 0;
+
 	max_height_above = 0;
 	max_height_below = 0;
+
+	/* Count all the icons */
+	for (p = icons; p != NULL; p = p->next)
+		no_icons++;
+        
 	for (p = icons; p != NULL; p = p->next) {
 		icon = p->data;
 
@@ -1421,6 +1437,15 @@ lay_down_icons_horizontal (NemoIconContainer *container,
 
         if (gridded_layout) {
            icon_width = ceil ((bounds.x1 - bounds.x0)/grid_width) * grid_width;
+
+	   /* Total number of icons that can be fit in a line */
+           no_elems = (canvas_width / icon_width);
+
+            /* Try to distibute the space to all of the icons
+             * But sometimes no_icons can get a zero number
+             * so beware of divisions. */
+               if (no_elems >= 1 && no_elems <= no_icons)
+                       icon_width = (canvas_width - ICON_PAD_LEFT) / no_elems;
         } else {
            icon_width = (bounds.x1 - bounds.x0) + ICON_PAD_RIGHT + 8; /* 8 pixels extra for fancy selection box */
         }
@@ -1438,7 +1463,8 @@ lay_down_icons_horizontal (NemoIconContainer *container,
 				y += ICON_PAD_TOP + max_height_above;
 			}
 
-			lay_down_one_line (container, line_start, p, y, max_height_above, positions, FALSE);
+			lay_down_one_line (container, line_start, p, y, max_height_above, positions, FALSE, \
+				 (gint) (icon_width - line_width));
 			
 			if (container->details->label_position == NEMO_ICON_LABEL_POSITION_BESIDE) {
 				y += max_height_above + max_height_below + ICON_PAD_BOTTOM;
@@ -1492,7 +1518,8 @@ lay_down_icons_horizontal (NemoIconContainer *container,
 				y += ICON_PAD_TOP + max_height_above;
 			}
 		
-		lay_down_one_line (container, line_start, NULL, y, max_height_above, positions, TRUE);
+		lay_down_one_line (container, line_start, NULL, y, max_height_above, positions, TRUE,  \
+			(gint) (icon_width - line_width));
 	}
 
 	g_array_free (positions, TRUE);
