@@ -8329,6 +8329,7 @@ nemo_icon_container_set_label_position (NemoIconContainer *container,
 		container->details->label_position = position;
 
 		invalidate_labels (container);
+		invalidate_label_sizes (container);
 		nemo_icon_container_request_update_all (container);
 
 		schedule_redo_layout (container);
