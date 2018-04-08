@@ -1445,7 +1445,10 @@ lay_down_icons_horizontal (NemoIconContainer *container,
              * But sometimes no_icons can get a zero number
              * so beware of divisions. */
                if (no_elems >= 1 && no_elems <= no_icons)
-                       icon_width = (canvas_width - ICON_PAD_LEFT) / no_elems;
+                  icon_width = (canvas_width - ICON_PAD_LEFT) / no_elems;
+       
+           /* Update the context that there's about this much free space */ 
+           container->details->width_delta_global = icon_width - ceil ((bounds.x1 - bounds.x0)/grid_width) * grid_width;
         } else {
            icon_width = (bounds.x1 - bounds.x0) + ICON_PAD_RIGHT + 8; /* 8 pixels extra for fancy selection box */
         }

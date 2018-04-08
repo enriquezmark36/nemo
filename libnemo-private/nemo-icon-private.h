@@ -218,6 +218,9 @@ struct NemoIconContainerDetails {
     gboolean click_to_rename;
 	gint icon_width;
 
+	/* The size of extra space used for padding in an icon grid */
+	gint width_delta_global;
+    
 	/* Whether for the vertical layout, all columns are supposed to
 	 * have the same width. */
 	gboolean all_columns_same_width;

@@ -2089,9 +2089,15 @@ nemo_icon_canvas_item_get_max_text_width (NemoIconCanvasItem *item)
 {
 	EelCanvasItem *canvas_item;
 	NemoIconContainer *container;
+    gint delta;
 
 	canvas_item = EEL_CANVAS_ITEM (item);
 	container = NEMO_ICON_CONTAINER (canvas_item->canvas);
+    
+    delta = container->details->width_delta_global;
+    if (delta < 0)
+        delta = 0;
+
     if (nemo_icon_container_is_tighter_layout (container)) {
        return MAX_TEXT_WIDTH_TIGHTER * canvas_item->canvas->pixels_per_unit;
     } else {
@@ -2112,15 +2118,15 @@ nemo_icon_canvas_item_get_max_text_width (NemoIconCanvasItem *item)
 	} else {
 	   switch (nemo_icon_container_get_icon_width (container)) {
 		case SHORTER:
-		   return MAX_TEXT_WIDTH_SHORTER * canvas_item->canvas->pixels_per_unit;
+		   return MAX_TEXT_WIDTH_SHORTER * canvas_item->canvas->pixels_per_unit + delta;
 		case SHORT:
-	           return MAX_TEXT_WIDTH_SHORT * canvas_item->canvas->pixels_per_unit;
+	           return MAX_TEXT_WIDTH_SHORT * canvas_item->canvas->pixels_per_unit + delta;
 		case NORMAL:
-		   return MAX_TEXT_WIDTH_STANDARD * canvas_item->canvas->pixels_per_unit;
+		   return MAX_TEXT_WIDTH_STANDARD * canvas_item->canvas->pixels_per_unit + delta;
 		case LONG:
-	           return MAX_TEXT_WIDTH_LONG * canvas_item->canvas->pixels_per_unit;
+	           return MAX_TEXT_WIDTH_LONG * canvas_item->canvas->pixels_per_unit + delta;
 		case LONGER:
-		   return MAX_TEXT_WIDTH_LONGER * canvas_item->canvas->pixels_per_unit;
+		   return MAX_TEXT_WIDTH_LONGER * canvas_item->canvas->pixels_per_unit + delta;
 	   }
         }
 	}
