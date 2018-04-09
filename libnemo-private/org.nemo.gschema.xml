@@ -39,6 +39,14 @@
     <value nick="trash-time" value="7"/>
   </enum>
 
+  <enum id="org.nemo.IconWidth">
+    <value nick="shorter" value="0"/>
+    <value nick="short" value="1"/>
+    <value nick="standard" value="2"/>
+    <value nick="long" value="3"/>
+    <value nick="longer" value="4"/>
+  </enum>
+
   <enum id="org.nemo.ZoomLevel">
     <value nick="smallest" value="0"/>
     <value nick="smaller" value="1"/>
@@ -387,6 +395,16 @@
       <default>false</default>
       <summary>Use tighter layout in new windows</summary>
       <description>If true, icons will be laid out tighter by default in new windows.</description>
+    </key>
+    <key name="icon-width" enum="org.nemo.IconWidth">
+      <default>'standard'</default>
+      <summary>Icon Width</summary>
+      <description>Adjusts the width of each displayed icons.
+      This applies only in Icon View when not using the Compact Layout option.
+      Also, the Desktop and folders set in other views, such as List view
+      and Compact View, won't be affected by this option.
+      This may remind you of some open source file manager.
+      Possible values are "shorter", "short", "standard", "long", and "longer"</description>
     </key>
     <key name="labels-beside-icons" type="b">
       <default>false</default>

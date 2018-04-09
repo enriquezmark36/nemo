@@ -53,6 +53,14 @@ typedef enum {
 	DRAG_STATE_STRETCH
 } DragState;
 
+typedef enum {
+	SHORTER,
+	SHORT,
+	STANDARD,
+	LONG,
+	LONGER
+} IconWidth;
+
 typedef struct {
 	/* Pointer position in canvas coordinates. */
 	int pointer_x, pointer_y;
@@ -88,6 +96,10 @@ typedef struct {
     gint container_pad_right;
     gint container_pad_top;
     gint container_pad_bottom;
+    gint shorter_icon_grid_width;
+    gint short_icon_grid_width;
+    gint long_icon_grid_width;
+    gint longer_icon_grid_width;
     gint standard_icon_grid_width;
     gint text_beside_icon_grid_width;
     gint desktop_pad_horizontal;
@@ -96,6 +108,10 @@ typedef struct {
     gint snap_size_y;
     gint max_text_width_standard;
     gint max_text_width_tighter;
+    gint max_text_width_shorter;
+    gint max_text_width_short;
+    gint max_text_width_long;
+    gint max_text_width_longer;
     gint max_text_width_beside;
     gint max_text_width_beside_top_to_bottom;
     gint icon_vertical_adjust;
@@ -225,6 +241,9 @@ struct NemoIconContainerDetails {
         gboolean stored_auto_layout;
 	gboolean tighter_layout;
         gboolean click_to_rename;
+
+	/* Icon Width */
+	IconWidth icon_width;
 
 	/* Whether for the vertical layout, all columns are supposed to
 	 * have the same width. */

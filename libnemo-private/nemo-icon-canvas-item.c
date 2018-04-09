@@ -2092,8 +2092,22 @@ nemo_icon_canvas_item_get_max_text_width (NemoIconCanvasItem *item)
             } else {
                 return GET_VIEW_CONSTANT (container, max_text_width_beside) * canvas_item->canvas->pixels_per_unit;
             }
+        } else if (container->details->is_desktop) {
+            /*Do not Touch the Desktop Font*/
+            return GET_VIEW_CONSTANT (container, max_text_width_standard) * canvas_item->canvas->pixels_per_unit;
         } else {
-           return GET_VIEW_CONSTANT (container, max_text_width_standard) * canvas_item->canvas->pixels_per_unit;
+            switch (container->details->icon_width) {
+                case SHORTER:
+                    return GET_VIEW_CONSTANT (container, max_text_width_shorter) * canvas_item->canvas->pixels_per_unit;
+                case SHORT:
+                    return GET_VIEW_CONSTANT (container, max_text_width_short) * canvas_item->canvas->pixels_per_unit;
+                case STANDARD: default:
+                    return GET_VIEW_CONSTANT (container, max_text_width_standard) * canvas_item->canvas->pixels_per_unit;
+                case LONG:
+                    return GET_VIEW_CONSTANT (container, max_text_width_long) * canvas_item->canvas->pixels_per_unit;
+                case LONGER:
+                    return GET_VIEW_CONSTANT (container, max_text_width_longer) * canvas_item->canvas->pixels_per_unit;
+            }
         }
 	}
 }

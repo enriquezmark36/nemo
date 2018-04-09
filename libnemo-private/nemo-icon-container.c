@@ -6542,6 +6542,28 @@ nemo_icon_container_set_tighter_layout (NemoIconContainer *container,
    }
 }
 
+void
+nemo_icon_container_set_icon_width (NemoIconContainer *container,
+                                        gint icon_width)
+{
+   g_return_if_fail (NEMO_IS_ICON_CONTAINER (container));
+
+   if (container->details->icon_width == icon_width) {
+       return;
+   }
+
+   container->details->icon_width = icon_width;
+
+   invalidate_label_sizes (container);
+
+   if (container->details->auto_layout) {
+       nemo_icon_container_redo_layout (container);
+       g_signal_emit (container, signals[LAYOUT_CHANGED], 0);
+   } else {
+       nemo_icon_container_request_update_all (container);
+   }
+}
+
 gboolean
 nemo_icon_container_is_keep_aligned (NemoIconContainer *container)
 {
@@ -6695,6 +6717,13 @@ nemo_icon_container_is_tighter_layout (NemoIconContainer *container)
    return container->details->tighter_layout;
 }
 
+gint
+nemo_icon_container_get_icon_width (NemoIconContainer *container)
+{
+   g_return_val_if_fail (NEMO_IS_ICON_CONTAINER (container), FALSE);
+
+   return container->details->icon_width;
+}
 static void
 pending_icon_to_rename_destroy_callback (NemoIconCanvasItem *item, NemoIconContainer *container)
 {

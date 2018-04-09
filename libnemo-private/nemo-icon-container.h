@@ -286,6 +286,10 @@ gboolean          nemo_icon_container_is_tighter_layout             (NemoIconCon
 void              nemo_icon_container_set_tighter_layout            (NemoIconContainer  *container,
                                      gboolean                tighter_layout);
 
+gint              nemo_icon_container_get_icon_width                (NemoIconContainer  *container);
+void              nemo_icon_container_set_icon_width                (NemoIconContainer *container,
+                                     gint icon_width);
+
 gboolean          nemo_icon_container_is_keep_aligned               (NemoIconContainer  *container);
 void              nemo_icon_container_set_keep_aligned              (NemoIconContainer  *container,
 									 gboolean                keep_aligned);

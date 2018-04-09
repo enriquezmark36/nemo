@@ -793,7 +793,23 @@ lay_down_icons_horizontal (NemoIconContainer *container,
 
         grid_width = max_icon_width + max_text_width + GET_VIEW_CONSTANT (container, icon_pad_left) + GET_VIEW_CONSTANT (container, icon_pad_right);
     } else {
-        num_columns = floor(canvas_width / GET_VIEW_CONSTANT (container, standard_icon_grid_width));
+        switch (nemo_icon_container_get_icon_width (container)) {
+            case SHORTER:
+                num_columns = floor(canvas_width / GET_VIEW_CONSTANT (container, shorter_icon_grid_width));
+            break;
+            case SHORT:
+                num_columns = floor(canvas_width / GET_VIEW_CONSTANT (container, short_icon_grid_width));
+            break;
+            case STANDARD:
+                num_columns = floor(canvas_width / GET_VIEW_CONSTANT (container, standard_icon_grid_width));
+            break;
+            case LONG:
+                num_columns = floor(canvas_width / GET_VIEW_CONSTANT (container, long_icon_grid_width));
+            break;
+            case LONGER:
+                num_columns = floor(canvas_width / GET_VIEW_CONSTANT (container, longer_icon_grid_width));
+            break;
+        }
         num_columns = fmax(num_columns, 1);
         /* Minimum of one column */
         grid_width = canvas_width / num_columns - 1;
@@ -2176,6 +2192,10 @@ nemo_icon_view_container_construct (NemoIconViewContainer *icon_container,
     constants->container_pad_top = 4;
     constants->container_pad_bottom = 4;
     constants->standard_icon_grid_width = 155;
+    constants->shorter_icon_grid_width = 42;
+    constants->short_icon_grid_width = 125;
+    constants->long_icon_grid_width = 200;
+    constants->longer_icon_grid_width = 256;
     constants->text_beside_icon_grid_width = 205;
     constants->desktop_pad_horizontal = 10;
     constants->desktop_pad_vertical = 10;
@@ -2183,6 +2203,10 @@ nemo_icon_view_container_construct (NemoIconViewContainer *icon_container,
     constants->snap_size_y = 20;
     constants->max_text_width_standard = 135;
     constants->max_text_width_tighter = 80;
+    constants->max_text_width_shorter = 64;
+    constants->max_text_width_short = 105;
+    constants->max_text_width_long = 176;
+    constants->max_text_width_longer = 235;
     constants->max_text_width_beside = 90;
     constants->max_text_width_beside_top_to_bottom = 150;
 

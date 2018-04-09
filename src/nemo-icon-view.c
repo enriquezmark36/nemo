@@ -867,6 +867,13 @@ nemo_icon_view_get_directory_horizontal_layout (NemoIconView *icon_view,
                                            FALSE);
 }
 
+static gint
+nemo_icon_view_get_icon_width_key (void)
+{
+    return g_settings_get_enum (nemo_icon_view_preferences,
+                                NEMO_PREFERENCES_ICON_VIEW_ICON_WIDTH);
+}
+
 /* maintainence of tighter layout boolean */
 
 static gboolean
@@ -1087,6 +1094,8 @@ nemo_icon_view_begin_loading (NemoView *view)
 
     nemo_icon_container_set_tighter_layout (get_icon_container (icon_view),
                     nemo_icon_view_get_directory_tighter_layout (icon_view, file));
+	nemo_icon_container_set_icon_width (get_icon_container (icon_view),
+                                            nemo_icon_view_get_icon_width_key ());
 
 	set_labels_beside_icons (icon_view);
 	set_columns_same_width (icon_view);
@@ -1584,6 +1593,8 @@ nemo_icon_view_reset_to_defaults (NemoView *view)
 		(icon_container, get_default_directory_keep_aligned ());
     nemo_icon_container_set_tighter_layout
        (icon_container, get_default_directory_tighter_layout ());
+	nemo_icon_container_set_icon_width (icon_container,
+                           nemo_icon_view_get_icon_width_key ());
 
 	nemo_icon_container_sort (icon_container);
 
@@ -2106,6 +2117,23 @@ default_sort_order_changed_callback (gpointer callback_data)
 
 	icon_container = get_icon_container (icon_view);
 	g_return_if_fail (NEMO_IS_ICON_CONTAINER (icon_container));
+
+	nemo_icon_container_request_update_all (icon_container);
+}
+
+static void
+icon_width_callback (gpointer callback_data)
+{
+	NemoIconView *icon_view;
+	NemoIconContainer *icon_container;
+
+	g_return_if_fail (NEMO_IS_ICON_VIEW (callback_data));
+	icon_view = NEMO_ICON_VIEW (callback_data);
+
+	icon_container = get_icon_container (icon_view);
+	g_return_if_fail (NEMO_IS_ICON_CONTAINER (icon_container));
+	nemo_icon_container_set_icon_width (icon_container,
+				nemo_icon_view_get_icon_width_key ());
 
 	nemo_icon_container_request_update_all (icon_container);
 }
@@ -2688,6 +2716,10 @@ nemo_icon_view_constructed (NemoIconView *icon_view)
     g_signal_connect_swapped (nemo_icon_view_preferences,
                  "changed::" NEMO_PREFERENCES_ICON_VIEW_DEFAULT_USE_TIGHTER_LAYOUT,
                  G_CALLBACK (default_use_tighter_layout_changed_callback),
+                 icon_view);
+    g_signal_connect_swapped (nemo_icon_view_preferences,
+                 "changed::" NEMO_PREFERENCES_ICON_VIEW_ICON_WIDTH,
+                 G_CALLBACK (icon_width_callback),
                  icon_view);
 
     g_signal_connect_swapped (nemo_icon_view_preferences,
