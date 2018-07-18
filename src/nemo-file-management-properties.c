@@ -43,6 +43,7 @@
 /* string enum preferences */
 #define NEMO_FILE_MANAGEMENT_PROPERTIES_DEFAULT_VIEW_WIDGET "default_view_combobox"
 #define NEMO_FILE_MANAGEMENT_PROPERTIES_ICON_VIEW_ZOOM_WIDGET "icon_view_zoom_combobox"
+#define NEMO_FILE_MANAGEMENT_PROPERTIES_ICON_VIEW_ICON_WIDTH_WIDGET "icon_view_icon_width_combobox"
 #define NEMO_FILE_MANAGEMENT_PROPERTIES_COMPACT_VIEW_ZOOM_WIDGET "compact_view_zoom_combobox"
 #define NEMO_FILE_MANAGEMENT_PROPERTIES_LIST_VIEW_ZOOM_WIDGET "list_view_zoom_combobox"
 #define NEMO_FILE_MANAGEMENT_PROPERTIES_SORT_ORDER_WIDGET "sort_order_combobox"
@@ -124,6 +125,15 @@ static const char * const zoom_values[] = {
 	"large",
 	"larger",
 	"largest",
+	NULL
+};
+
+static const char * const width_values[] = {
+	"shorter",
+	"short",
+	"standard",
+	"long",
+	"longer",
 	NULL
 };
 
@@ -866,6 +876,10 @@ nemo_file_management_properties_dialog_setup (GtkBuilder *builder, GtkWindow *wi
 			   NEMO_FILE_MANAGEMENT_PROPERTIES_ICON_VIEW_ZOOM_WIDGET,
 			   NEMO_PREFERENCES_ICON_VIEW_DEFAULT_ZOOM_LEVEL,
 			   (const char **) zoom_values);
+	bind_builder_enum (builder, nemo_icon_view_preferences,
+			   NEMO_FILE_MANAGEMENT_PROPERTIES_ICON_VIEW_ICON_WIDTH_WIDGET,
+			   NEMO_PREFERENCES_ICON_VIEW_ICON_WIDTH,
+			   (const char **) width_values);
 	bind_builder_enum (builder, nemo_compact_view_preferences,
 			   NEMO_FILE_MANAGEMENT_PROPERTIES_COMPACT_VIEW_ZOOM_WIDGET,
 			   NEMO_PREFERENCES_COMPACT_VIEW_DEFAULT_ZOOM_LEVEL,
